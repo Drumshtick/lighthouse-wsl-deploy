@@ -47,7 +47,7 @@ function  OnClick {
   }
 
 
-  $url = "https://drive.google.com/uc?export=download&id=1peZu04gJARl7EbyHK04UvlOdREFNO7uB"
+  $url = "https://www.dropbox.com/s/hcdj7mj5fgmaysx/test.zip?dl=1"
 
   # $started = $true;
   Write-Host "started"
@@ -56,8 +56,10 @@ function  OnClick {
   $Button.Text = "Running"
   Write-Host "Downloading Archive:"  $url
   $outputBox.text += "Downloading Archive"
-
   Invoke-WebRequest $url -OutFile 'd:\tmp\image.zip'
+
+  $outputBox.text += "\nExtracting Archive"
+  # Invoke-WebRequest $url -OutFile 'd:\tmp\image.zip'
 
 }
 
