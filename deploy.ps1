@@ -1,5 +1,6 @@
 # Load the System.Windows.Forms assembly into PowerShell
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
 
 # Create a new Form object and assign to the variable $Form
 $Form = New-Object System.Windows.Forms.Form
@@ -56,25 +57,14 @@ function  OnClick {
   $Button.Text = "Running"
   Write-Host "Downloading Archive:"  $url
   
-  $outputBox.text += "Downloading Archive"
+  $outputBox.text += "Downloading Archive ..."
   Invoke-WebRequest $url -OutFile 'd:\tmp\image.zip'
 
-  $outputBox.text += "\nExtracting Archive"
-  # Invoke-WebRequest $url -OutFile 'd:\tmp\image.zip'
+   $outputBox.text += " `r`nExtracting Archive ..."
+   Expand-Archive d:\tmp\image.zip -DestinationPath d:\tmp
 
-}
-
-function getImage {
-  # Download archive
-  Write-Host "Downloading Archive"
-  Invoke-WebRequest 'www.google.ca' -OutFile 'd:\tmp\test.html'
-  
-  # extract archive
-  Write-Host "Extracting Archive"
-  Expand-Archive d:\tmp\test.zip -DestinationPath d:\tmp
-  
-}
-
+   $outputBox.text += " `r`nDone!"
+  }
 
 
 
