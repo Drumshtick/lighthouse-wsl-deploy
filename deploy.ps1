@@ -32,7 +32,7 @@ $Form.AutoSizeMode = "GrowOnly"
 
 
 #Initialize Form so it can be seen
-$Form.showDialog()
+[void] $Form.showDialog()
 
 function getImage {
   # Download archive
