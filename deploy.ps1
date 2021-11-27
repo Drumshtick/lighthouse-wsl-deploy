@@ -34,39 +34,74 @@ $outputBox.Scrollbars = "Vertical"
 $Form.Controls.Add($OutputBox)
 
 $Button = New-Object System.Windows.Forms.Button
-$Button.Location = New-Object System.Drawing.Size(200, 60)
+$Button.Location = New-Object System.Drawing.Size(230, 50)
 $Button.Size = New-Object System.Drawing.Size(110, 80)
 $Button.Text = "Click to Start"
 $Button.Add_Click( { OnClick } )
 $Form.Controls.Add($Button)
 
 $started = $false;
+$ErrorActionPreference = 'Stop'
 
 function  OnClick {
   if ($started) {
     return
   }
+  
+  $Button.Enabled = $false
+  $ButtonText = $Button.Text;
+  $Button.Text = "Running"
+  # $started = $true;
 
 
   $url = "https://www.dropbox.com/s/hcdj7mj5fgmaysx/test.zip?dl=1"
 
-  # $started = $true;
   Write-Host "started"
 
-  $Button.Enabled = $false
-  $Button.Text = "Running"
-  Write-Host "Downloading Archive:"  $url
+  $TempFile = New-TemporaryFile
+  $ZipFile = "$TempFile.zip"
   
-  $outputBox.text += "Downloading Archive ..."
-  Invoke-WebRequest $url -OutFile 'd:\tmp\image.zip'
-
-   $outputBox.text += " `r`nExtracting Archive ..."
-   Expand-Archive d:\tmp\image.zip -DestinationPath d:\tmp
-
-   $outputBox.text += " `r`nDone!"
+  Write-Host "Downloading Archive: $url"
+  Write-Host "Writing: $TempFile"
+  
+  try {
+    $outputBox.text += "Downloading Archive ..."
+    Invoke-WebRequest $url -OutFile  $TempFile
+  }
+  catch {
+    $outputBox.text += " `r`n$error"  
   }
 
 
+  if ($error) {
+    $outputBox.text += " `r`nError !!"
+    return
+  }
 
+  Write-Host "Renaming: $ZipFile"
+  Rename-Item -Path $TempFile -NewName $ZipFile
+
+  $outputBox.text += " `r`nExtracting Archive ..."
+  Write-Host "Unpacking: $ZipFile"
+
+  # Expand-Archive $ZipFile -DestinationPath d:\tmp
+  Expand-Archive -Force $ZipFile -DestinationPath d:\tmp
+
+  if ($error) {
+    $outputBox.text += " `r`nError !!"
+    return
+  }
+  
+
+  $outputBox.text += " `r`nCleaning up ..."
+  Write-Host "Deleting: $ZipFile"
+  Remove-Item $ZipFile
+
+  $outputBox.text += " `r`nDone!"
+  $outputBox.text += " `r`n$error"
+
+  # $Button.Enabled = $true
+  $Button.Text = "Done"
+}
 
 [void] $Form.showDialog()
