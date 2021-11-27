@@ -9,7 +9,7 @@ $Form.MaximizeBox = $false
 # $Form.ShowInTaskbar = $false
 # $Form.StartPosition = "CenterParent"     
 $Form.BackColor = "#FFEEEEEE"
-$Form.Size = New-Object System.Drawing.Size(600, 400)
+$Form.Size = New-Object System.Drawing.Size(600, 500)
 # AutoSize ensures the Form size can contain the text
 # $Form.AutoSize = $true
 $Form.AutoSizeMode = "GrowOnly"
@@ -40,6 +40,12 @@ $Button.Text = "Click to Start"
 $Button.Add_Click( { OnClick } )
 $Form.Controls.Add($Button)
 
+$CloseButton = New-Object System.Windows.Forms.Button
+$CloseButton.Location = New-Object System.Drawing.Size(230, 50)
+$CloseButton.Size = New-Object System.Drawing.Size(110, 80)
+$CloseButton.Text = "Close"
+$CloseButton.Add_Click( { Done } )
+
 $started = $false;
 $ErrorActionPreference = 'Stop'
 
@@ -49,7 +55,6 @@ function  OnClick {
   }
   $started = $true;
   $Button.Enabled = $false
-  # $ButtonText = $Button.Text;
   $Button.Text = "Running"
 
   $url = "https://www.dropbox.com/s/hcdj7mj5fgmaysx/test.zip?dl=1"
@@ -92,15 +97,11 @@ function  OnClick {
   
 
   Cleanup($ZipFile)
-
   $outputBox.text += " `r`nDone!"
   $outputBox.text += " `r`n$error"
 
-  # $Button.Enabled = $true
-  $Button.Text = "Done"
-
-  $Button.Add_Click( { Done } )
-
+  $Form.Controls.Remove($Button)
+  $Form.Controls.Add($CloseButton)
 }
 
 function  Done {
