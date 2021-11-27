@@ -5,14 +5,15 @@ Add-Type -AssemblyName System.Windows.Forms
 $Form = New-Object System.Windows.Forms.Form
 $Form.MinimizeBox = $false
 $Form.MaximizeBox = $false
-$Form.ShowInTaskbar = $false
+# $Form.ShowInTaskbar = $false
 # $Form.StartPosition = "CenterParent"     
 $Form.BackColor = "#FFEEEEEE"
+$Form.Size = New-Object System.Drawing.Size(600,400)
 
 $Form.Text = "Lighthouse Labs VM  Installer"
 
 $FontFace = New-Object System.Drawing.Font(
-  "Comic Sans MS",16,[System.Drawing.FontStyle]::Regular
+  "Comic Sans MS",14,[System.Drawing.FontStyle]::Regular
   )
   
 # Initialize the forms font
@@ -28,8 +29,28 @@ $Form.Controls.Add($Label)
 $Form.AutoSize = $true
 $Form.AutoSizeMode = "GrowOnly"
 
+$outputBox = New-Object System.Windows.Forms.TextBox
+$outputBox.Location = New-Object System.Drawing.Size(10,150)
+$outputBox.Size = New-Object System.Drawing.Size(565,200)
+$outputBox.MultiLine = $True
 
+# Initialize the textbox inside the Form
+$Form.Controls.Add($OutputBox)
 
+$Button = New-Object System.Windows.Forms.Button
+$Button.Location = New-Object System.Drawing.Size(200,60)
+
+# Button size(length>,<height>) in pixels
+$Button.Size = New-Object System.Drawing.Size(110,80)
+
+# Label the button
+$Button.Text = "Click to Start"
+
+# Declare the action to occur when button clicked
+# $Button.Add_Click( { GetDirectories } )
+
+# Initialize the button inside the Form
+$Form.Controls.Add($Button)
 
 #Initialize Form so it can be seen
 [void] $Form.showDialog()
