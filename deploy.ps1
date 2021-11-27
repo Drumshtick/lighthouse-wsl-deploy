@@ -55,6 +55,7 @@ function  OnClick {
   $Button.Enabled = $false
   $Button.Text = "Running"
   Write-Host "Downloading Archive:"  $url
+  
   $outputBox.text += "Downloading Archive"
   Invoke-WebRequest $url -OutFile 'd:\tmp\image.zip'
 
