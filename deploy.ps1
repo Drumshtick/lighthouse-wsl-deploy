@@ -3,6 +3,12 @@ Add-Type -AssemblyName System.Windows.Forms
 
 # Create a new Form object and assign to the variable $Form
 $Form = New-Object System.Windows.Forms.Form
+$Form.MinimizeBox = $false
+$Form.MaximizeBox = $false
+$Form.ShowInTaskbar = $false
+# $Form.StartPosition = "CenterParent"     
+$Form.BackColor = "#FFEEEEEE"
+
 $Form.Text = "Lighthouse Labs VM  Installer"
 
 $FontFace = New-Object System.Drawing.Font(
@@ -42,4 +48,3 @@ function getImage {
 
 
 
-# https://www.windows10forums.com/articles/windows-powershell-tutorial-8-forms-part-1.73/
