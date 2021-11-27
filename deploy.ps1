@@ -12,14 +12,11 @@ $Form.Size = New-Object System.Drawing.Size(600,400)
 # AutoSize ensures the Form size can contain the text
 # $Form.AutoSize = $true
 $Form.AutoSizeMode = "GrowOnly"
-
 $Form.Text = "Lighthouse Labs VM  Installer"
 
 $FontFace = New-Object System.Drawing.Font(
   "Comic Sans MS",14,[System.Drawing.FontStyle]::Regular
   )
-  
-# Initialize the forms font
 $Form.Font = $FontFace
 
 # Create a Label object
@@ -27,7 +24,6 @@ $Label = New-Object System.Windows.Forms.Label
 $Label.Text = "This will deploy the LHL WSL Image on your system"
 $Label.AutoSize = $true
 $Form.Controls.Add($Label)
-
 
 $outputBox = New-Object System.Windows.Forms.TextBox
 $outputBox.Location = New-Object System.Drawing.Size(10,150)
