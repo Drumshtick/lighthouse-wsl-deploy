@@ -91,15 +91,27 @@ function  OnClick {
   }
   
 
-  $outputBox.text += " `r`nCleaning up ..."
-  Write-Host "Deleting: $ZipFile"
-  Remove-Item $ZipFile
+  Cleanup($ZipFile)
 
   $outputBox.text += " `r`nDone!"
   $outputBox.text += " `r`n$error"
 
   # $Button.Enabled = $true
   $Button.Text = "Done"
+
+  $Button.Add_Click( { Done } )
+
+}
+
+function  Done {
+  $Form.Close();
+}
+
+function  Cleanup {
+  param ($ZipFile)
+  $outputBox.text += " `r`nCleaning up ..."
+  Write-Host "Deleting: $ZipFile"
+  Remove-Item $ZipFile
 }
 
 [void] $Form.showDialog()
