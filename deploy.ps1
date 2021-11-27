@@ -47,12 +47,10 @@ function  OnClick {
   if ($started) {
     return
   }
-  
+  $started = $true;
   $Button.Enabled = $false
-  $ButtonText = $Button.Text;
+  # $ButtonText = $Button.Text;
   $Button.Text = "Running"
-  # $started = $true;
-
 
   $url = "https://www.dropbox.com/s/hcdj7mj5fgmaysx/test.zip?dl=1"
 
