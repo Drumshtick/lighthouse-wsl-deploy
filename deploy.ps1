@@ -9,6 +9,9 @@ $Form.MaximizeBox = $false
 # $Form.StartPosition = "CenterParent"     
 $Form.BackColor = "#FFEEEEEE"
 $Form.Size = New-Object System.Drawing.Size(600,400)
+# AutoSize ensures the Form size can contain the text
+# $Form.AutoSize = $true
+$Form.AutoSizeMode = "GrowOnly"
 
 $Form.Text = "Lighthouse Labs VM  Installer"
 
@@ -25,35 +28,26 @@ $Label.Text = "This will deploy the LHL WSL Image on your system"
 $Label.AutoSize = $true
 $Form.Controls.Add($Label)
 
-# AutoSize ensures the Form size can contain the text
-$Form.AutoSize = $true
-$Form.AutoSizeMode = "GrowOnly"
 
 $outputBox = New-Object System.Windows.Forms.TextBox
 $outputBox.Location = New-Object System.Drawing.Size(10,150)
 $outputBox.Size = New-Object System.Drawing.Size(565,200)
 $outputBox.MultiLine = $True
-
-# Initialize the textbox inside the Form
 $Form.Controls.Add($OutputBox)
 
 $Button = New-Object System.Windows.Forms.Button
 $Button.Location = New-Object System.Drawing.Size(200,60)
-
-# Button size(length>,<height>) in pixels
 $Button.Size = New-Object System.Drawing.Size(110,80)
-
-# Label the button
 $Button.Text = "Click to Start"
-
-# Declare the action to occur when button clicked
-# $Button.Add_Click( { GetDirectories } )
-
-# Initialize the button inside the Form
+$Button.Add_Click( { OnClick } )
 $Form.Controls.Add($Button)
 
-#Initialize Form so it can be seen
-[void] $Form.showDialog()
+
+
+function  OnClick {
+  Write-Host "started"
+  
+}
 
 function getImage {
   # Download archive
@@ -63,9 +57,11 @@ function getImage {
   # extract archive
   Write-Host "Extracting Archive"
   Expand-Archive d:\tmp\test.zip -DestinationPath d:\tmp
-
+  
 }
 
 
 
 
+
+[void] $Form.showDialog()
