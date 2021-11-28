@@ -70,37 +70,10 @@ $ErrorActionPreference = 'Stop'
 $tarFile = "$env:temp\Lighthouse_wsl-v1.2.tar"
 
 function  EnableWSL {
-  $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
-
   $error.Clear()
   # $EnableButton.Enabled = $false
   $DeployButton.Enabled = $false
   $EnableButton.Text = "Running"
-
-  # outputs multi-byte char response
-  $ver = ""
-  $output1 = Invoke-Expression 'c:\windows\system32\wsl.exe --status'
-  foreach ($item in $output1) {
-    $nstr = toString($item)
-    if ($nstr.length -gt 3) {
-      # $match = ($nstr -Match "v.e.r.s.i.o.n.:.\s.5")
-      $match = ($nstr -Match "version: 5")
-      if ($match) {
-        Write-Host  $item
-        $outputBox.text += "$nstr`r`n"
-        $ver = $item
-      }
-    }
-  }
-
-  Write-Host  "WSL Enabled=$match" 
-  if ($match) {
-    $msg = "You system already has WSL enabled.  You can proceed to Step 2"
-    $outputBox.text += "$msg`r`n"
-    $DeployButton.Enabled = $true
-    return
-  }
-
 
   $isAdmin = [Security.Principal.WindowsPrincipal]::new(
     [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -197,9 +170,6 @@ function  UnPack {
   }
 }
 
-
-
-
 function  Cleanup {
   param ($ZipFile)
   $outputBox.text += " `r`nCleaning up ..."
@@ -211,16 +181,38 @@ function  Cleanup {
   Remove-Item $tarFile
 }
 
-function toString {
-  param ($in)
-  $out = "";
-  $chars = $in.toCharArray()
-  foreach ($char in $chars) {
-    if ($char) {
-      $out += $char
+function hasWSL {
+  # Detects if system has WSL version 5+ enabled
+  # Note: this outputs multi-byte char response
+  $output1 = Invoke-Expression 'c:\windows\system32\wsl.exe --status'
+  foreach ($item in $output1) {
+    $nstr = removeNulls($item)
+    if ($nstr.length -gt 3) {
+      $match = ($nstr -Match "version: [4,5,6]")
+      if ($match) {
+        Write-Host  $nstr
+        $outputBox.text += "$nstr`r`n"
+      }
     }
   }
+  return $match
+}
+
+function removeNulls {
+  # Removes null chars from string
+  param ($in)
+  $out = $in -replace "`0" 
   return $out;
+}
+
+$wslEnabled = hasWSL 
+Write-Host  $wslEnabled
+if ($wslEnabled) {
+  $msg = "Your system has WSL enabled.  You can proceed to Step 2"
+  $outputBox.text += "$msg`r`n"
+  $DeployButton.Enabled = $true
+  $EnableButton.Enabled = $false
+  $EnableButton.text = "Done"
 }
 
 [void] $Form.showDialog()
