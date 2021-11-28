@@ -199,12 +199,12 @@ function Confirm-WSL-Version {
   # Note: this outputs multi-byte char response
   $output1 = Invoke-Expression 'c:\windows\system32\wsl.exe --status'
   foreach ($item in $output1) {
-    $nstr = removeNulls($item)
-    if ($nstr.length -gt 3) {
-      Write-Host $nstr
-      $version = ($nstr -Match "version: [4,5,6]")
+    $str = removeNulls($item)
+    if ($str.length -gt 3) {
+      Write-Host $str
+      $version = ($str -Match "version: [4,5,6]")
       if ($version) {
-        Write-Textbox  $nstr
+        Write-Textbox  $str
       }
     }
   }
