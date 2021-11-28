@@ -111,7 +111,7 @@ function  EnableWSL {
     Write-Textbox $out
   }
 
-  $outputBox.text += "Code = $LASTEXITCODE`r`n" 
+  Write-Textbox "Code = $LASTEXITCODE" 
 
   if (!$error) {
     $EnableButton.Text = "Done!"
