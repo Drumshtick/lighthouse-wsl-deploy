@@ -36,6 +36,8 @@ $FontFace = New-Object System.Drawing.Font(
   "Lucida Console", 12, [System.Drawing.FontStyle]::Regular
 )
 $outputBox.Font = $FontFace
+$outputBox.TabStop = $false
+$outputBox.ReadOnly = $true
 
 $Form.Controls.Add($OutputBox)
 
@@ -208,7 +210,7 @@ function removeNulls {
 $wslEnabled = hasWSL 
 Write-Host  $wslEnabled
 if ($wslEnabled) {
-  $msg = "Your system has WSL enabled.  You can proceed to Step 2"
+  $msg = "Your system has WSL enabled. You can proceed to Step 2"
   $outputBox.text += "$msg`r`n"
   $DeployButton.Enabled = $true
   $EnableButton.Enabled = $false
