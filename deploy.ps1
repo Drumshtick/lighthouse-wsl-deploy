@@ -104,21 +104,16 @@ function  EnableWSL {
 
   # TODO: Download enable WSL cmd file
 
-  Write-Textbox 'Enabling WSL ...'
-  try {
-    Invoke-Item 'D:\tmp\enable.cmd'
-  }
-  catch {
-    Write-Textbox $out
-  }
-
-  Write-Textbox "Code = $LASTEXITCODE" 
+  Write-Textbox 'Enabling WSL ...(dummy stub for now)'
+  Invoke-Item 'D:\tmp\enable.cmd'
+  # Write-Textbox "Code = $LASTEXITCODE" 
 
   if (!$error) {
     $EnableButton.Text = "Done!"
     Write-Textbox 'Done'
   }
-  Write-Textbox '$error'
+
+  Write-Textbox $error
 }
 function  Import-Image {
   if ($started) {
