@@ -46,7 +46,7 @@ $Form.Controls.Add($OutputBox)
 $DeployButton = New-Object System.Windows.Forms.Button
 $DeployButton.Location = New-Object System.Drawing.Size(290, 50)
 $DeployButton.Size = New-Object System.Drawing.Size(110, 80)
-$DeployButton.Text = "Step 3: `r`nDownload VM Image"
+$DeployButton.Text = "Step 3: `r`nImport VM Image"
 $DeployButton.Add_Click( { Import-Image } )
 $DeployButton.Enabled = $false
 $DeployButton.Visible = $true
