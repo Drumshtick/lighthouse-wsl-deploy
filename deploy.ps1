@@ -54,6 +54,7 @@ $CloseButton.Add_Click( { $Form.Close() } )
 
 $started = $false;
 $ErrorActionPreference = 'Stop'
+$tarFile = "$env:temp\Lighthouse_wsl-v1.2.tar"
 
 function  OnClick {
   if ($started) {
@@ -113,8 +114,8 @@ function  UnPack {
   Write-Host "Unpacking: $Filename"
   
   try {
-    Expand-Archive $Filename 
-    # Expand-Archive -Force $Filename -DestinationPath d:\tmp
+    Expand-Archive $Filename  -DestinationPath $env:temp
+    # Expand-Archive -Force $Filename
   }
   catch {
     $outputBox.text += " `r`n$error"  
@@ -127,6 +128,10 @@ function  Cleanup {
   $outputBox.text += " `r`nCleaning up ..."
   Write-Host "Deleting: $ZipFile"
   Remove-Item $ZipFile
+  # Remove-Item "$env:temp"
+
+  Write-Host "Deleting: $tarFile"
+  Remove-Item $tarFile
 }
 
 [void] $Form.showDialog()
