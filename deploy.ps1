@@ -2,6 +2,7 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 $ErrorActionPreference = 'SilentlyContinue'
+[string]$n = "`r`n"
 
 # Create a new Form object and assign to the variable $Form
 $Form = New-Object System.Windows.Forms.Form
@@ -46,7 +47,7 @@ $DeployButton = New-Object System.Windows.Forms.Button
 $DeployButton.Location = New-Object System.Drawing.Size(230, 50)
 $DeployButton.Size = New-Object System.Drawing.Size(110, 80)
 $DeployButton.Text = "Step 2: `r`nDownload VM Image"
-$DeployButton.Add_Click( { OnClick } )
+$DeployButton.Add_Click( { Import-Image } )
 $Form.Controls.Add($DeployButton)
 
 $EnableButton = New-Object System.Windows.Forms.Button
@@ -71,6 +72,16 @@ $CloseButton2.Add_Click( { $Form.Close() } )
 $started = $false;
 $tarFile = "$env:temp\Lighthouse_wsl-v1.2.tar"
 
+function Write-Textbox {
+  param  ( [string]$text, [int] $nl = 0)
+
+  [string]$txt = "$text$n"
+  for ($i = 0; $i -lt $nl; $i++) {
+    $txt += $n
+  }
+  $outputBox.text += "$txt"
+}
+
 function  EnableWSL {
   $error.Clear()
   # $EnableButton.Enabled = $false
@@ -80,35 +91,35 @@ function  EnableWSL {
   $isAdmin = [Security.Principal.WindowsPrincipal]::new(
     [Security.Principal.WindowsIdentity]::GetCurrent()
   ).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-  $outputBox.text += "Admin=$isAdmin`r`n`r`n"
+  Write-Textbox "Admin=$isAdmin" 1
   if (!$isAdmin) {
-    $msg = "This Part of the process requires PowerShell to be started as Administrator`r`n`r`nPlease run PowerShell as Administrator and re-run"
-    $outputBox.text += "$msg`r`n"
+    Write-Textbox 'This Part of the process requires PowerShell to be started as Administrator' 1
+    Write-Textbox 'Please run PowerShell as Administrator and re-run'
  
     $Form.Controls.Remove($EnableButton)
     $Form.Controls.Add($CloseButton1)
     return
   }
 
-  # Download enable WSL cmd file
+  # TODO: Download enable WSL cmd file
 
-  $outputBox.text += "Enabling WSL ...`r`n"
+  Write-Textbox 'Enabling WSL ...'
   try {
     Invoke-Item 'D:\tmp\enable.cmd'
   }
   catch {
-    $outputBox.text += "$out`r`n"
+    Write-Textbox $out
   }
 
   $outputBox.text += "Code = $LASTEXITCODE`r`n" 
 
   if (!$error) {
     $EnableButton.Text = "Done!"
-    $outputBox.text += " `r`nDone!"
+    Write-Textbox 'Done'
   }
-  $outputBox.text += "$error`r`n"
+  Write-Textbox '$error'
 }
-function  OnClick {
+function  Import-Image {
   if ($started) {
     return
   }
@@ -130,15 +141,14 @@ function  OnClick {
   }
 
   if ($error) {
-    $outputBox.text += " `r`nDeploy Failed with errors"
-  }
-  else {
-    $outputBox.text += " `r`nDone!"
+    Write-Textbox " `r`nDeploy Failed with errors"
   }
 
   Cleanup($ZipFile)
   $Form.Controls.Remove($DeployButton)
   $Form.Controls.Add($CloseButton2)
+
+  Write-Textbox 'Done!'
 }
 
 function  Download {
@@ -149,11 +159,11 @@ function  Download {
   Write-Host "Writing: $TempFile"
   
   try {
-    $outputBox.text += "Downloading Archive ..."
+    Write-Textbox 'Downloading Archive ...'
     Invoke-WebRequest $url -OutFile  $TempFile
   }
   catch {
-    $outputBox.text += " `r`n$error"  
+    Write-Textbox $error
   }
 
   return $TempFile 
@@ -161,20 +171,20 @@ function  Download {
 
 function  UnPack {
   param ($Filename)
-  $outputBox.text += " `r`nExtracting Archive ..."
+  Write-Textbox 'Extracting Archive ..'
   Write-Host "Unpacking: $Filename"
   
   try {
     Expand-Archive -Force  $Filename  -DestinationPath $env:temp
   }
   catch {
-    $outputBox.text += " `r`n$error"  
+    Write-Textbox $error
   }
 }
 
 function  Cleanup {
   param ($ZipFile)
-  $outputBox.text += " `r`nCleaning up ..."
+  Write-Textbox " `r`nCleaning up ..."
   Write-Host "Deleting: $ZipFile"
   Remove-Item $ZipFile
   # Remove-Item "$env:temp"
@@ -183,17 +193,17 @@ function  Cleanup {
   Remove-Item $tarFile
 }
 
-function hasWSL {
+function Confirm-WSL-Version {
   # Detects if system has WSL version 5+ enabled
   # Note: this outputs multi-byte char response
   $output1 = Invoke-Expression 'c:\windows\system32\wsl.exe --status'
   foreach ($item in $output1) {
     $nstr = removeNulls($item)
     if ($nstr.length -gt 3) {
+      Write-Host $nstr
       $match = ($nstr -Match "version: [4,5,6]")
       if ($match) {
-        Write-Host  $nstr
-        $outputBox.text += "$nstr`r`n"
+        Write-Textbox  $nstr
       }
     }
   }
@@ -207,11 +217,10 @@ function removeNulls {
   return $out;
 }
 
-$wslEnabled = hasWSL 
-Write-Host  $wslEnabled
+$wslEnabled = Confirm-WSL-Version 
+Write-Host  "WSL2=$wslEnabled"
 if ($wslEnabled) {
-  $msg = "Your system has WSL enabled. You can proceed to Step 2"
-  $outputBox.text += "$msg`r`n"
+  Write-Textbox 'Your system has WSL2 enabled. Continue to Step 2'
   $DeployButton.Enabled = $true
   $EnableButton.Enabled = $false
   $EnableButton.text = "Step 1:`r`nDone"
