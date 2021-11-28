@@ -44,10 +44,12 @@ $outputBox.ReadOnly = $true
 $Form.Controls.Add($OutputBox)
 
 $DeployButton = New-Object System.Windows.Forms.Button
-$DeployButton.Location = New-Object System.Drawing.Size(230, 50)
+$DeployButton.Location = New-Object System.Drawing.Size(290, 50)
 $DeployButton.Size = New-Object System.Drawing.Size(110, 80)
-$DeployButton.Text = "Step 2: `r`nDownload VM Image"
+$DeployButton.Text = "Step 3: `r`nDownload VM Image"
 $DeployButton.Add_Click( { Import-Image } )
+$DeployButton.Enabled = $false
+$DeployButton.Visible = $true
 $Form.Controls.Add($DeployButton)
 
 $EnableButton = New-Object System.Windows.Forms.Button
@@ -85,7 +87,6 @@ function Write-Textbox {
 function  EnableWSL {
   $error.Clear()
   # $EnableButton.Enabled = $false
-  $DeployButton.Enabled = $false
   $EnableButton.Text = "Running"
 
   $isAdmin = [Security.Principal.WindowsPrincipal]::new(
@@ -201,13 +202,13 @@ function Confirm-WSL-Version {
     $nstr = removeNulls($item)
     if ($nstr.length -gt 3) {
       Write-Host $nstr
-      $match = ($nstr -Match "version: [4,5,6]")
-      if ($match) {
+      $version = ($nstr -Match "version: [4,5,6]")
+      if ($version) {
         Write-Textbox  $nstr
       }
     }
   }
-  return $match
+  return $version
 }
 
 function removeNulls {
@@ -220,7 +221,7 @@ function removeNulls {
 $wslEnabled = Confirm-WSL-Version 
 Write-Host  "WSL2=$wslEnabled"
 if ($wslEnabled) {
-  Write-Textbox 'Your system has WSL2 enabled. Continue to Step 2'
+  Write-Textbox 'Your system has WSL2 enabled. Continue to Step 3'
   $DeployButton.Enabled = $true
   $EnableButton.Enabled = $false
   $EnableButton.text = "Step 1:`r`nDone"
