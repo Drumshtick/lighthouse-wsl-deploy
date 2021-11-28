@@ -1,6 +1,7 @@
 # Load the System.Windows.Forms assembly into PowerShell
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+$ErrorActionPreference = 'SilentlyContinue'
 
 # Create a new Form object and assign to the variable $Form
 $Form = New-Object System.Windows.Forms.Form
@@ -68,7 +69,6 @@ $CloseButton2.Text = "Exit"
 $CloseButton2.Add_Click( { $Form.Close() } )
 
 $started = $false;
-$ErrorActionPreference = 'Stop'
 $tarFile = "$env:temp\Lighthouse_wsl-v1.2.tar"
 
 function  EnableWSL {
