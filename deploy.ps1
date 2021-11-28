@@ -94,8 +94,7 @@ function  EnableWSL {
   ).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
   Write-Textbox "Admin=$isAdmin" 1
   if (!$isAdmin) {
-    Write-Textbox 'This Part of the process requires PowerShell to be run 
-     as Administrator' 1
+    Write-Textbox 'This Part of the process requires PowerShell to be run as Administrator' 1
     Write-Textbox 'Please run PowerShell as Administrator and re-run'
  
     $Form.Controls.Remove($EnableButton)
