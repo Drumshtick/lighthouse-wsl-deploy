@@ -66,7 +66,7 @@ $CloseButton1.Text = "Exit"
 $CloseButton1.Add_Click( { $Form.Close() } )
 
 $CloseButton2 = New-Object System.Windows.Forms.Button
-$CloseButton2.Location = New-Object System.Drawing.Size(230, 50)
+$CloseButton2.Location = New-Object System.Drawing.Size(290, 50)
 $CloseButton2.Size = New-Object System.Drawing.Size(110, 80)
 $CloseButton2.Text = "Exit"
 $CloseButton2.Add_Click( { $Form.Close() } )
