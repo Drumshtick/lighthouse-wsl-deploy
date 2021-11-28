@@ -214,7 +214,7 @@ if ($wslEnabled) {
   $outputBox.text += "$msg`r`n"
   $DeployButton.Enabled = $true
   $EnableButton.Enabled = $false
-  $EnableButton.text = "Done"
+  $EnableButton.text = "Step 1:`r`nDone"
 }
 
 [void] $Form.showDialog()
