@@ -95,7 +95,7 @@ function  EnableWSL {
   Write-Textbox "Admin=$isAdmin" 1
   if (!$isAdmin) {
     Write-Textbox 'This step requires PowerShell to be run as Administrator' 1
-    Write-Textbox 'Please run PowerShell as Administrator and re-run'
+    Write-Textbox 'Please run PowerShell as Administrator and try again'
  
     $Form.Controls.Remove($EnableButton)
     $Form.Controls.Add($CloseButton1)
