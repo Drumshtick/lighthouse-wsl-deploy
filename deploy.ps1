@@ -102,7 +102,7 @@ function  EnableWSL {
     return
   }
 
-  # TODO: Download enable WSL cmd file
+  # TODO: Create enable cmd file
 
   Write-Textbox 'Enabling WSL ...(dummy stub for now)'
   Invoke-Item 'D:\tmp\enable.cmd'
