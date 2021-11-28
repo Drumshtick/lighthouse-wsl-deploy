@@ -142,7 +142,7 @@ function  Import-Image {
   }
 
   if ($error) {
-    Write-Textbox " `r`nDeploy Failed with errors"
+    Write-Textbox "`r`nDeploy Failed with errors"
   }
 
   Cleanup($ZipFile)
